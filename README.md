@@ -13,6 +13,8 @@ Osan is a design and motion exercise: an editorial, image-first site where the a
 - **Scroll-driven opening.** A pill-shaped window opens to full bleed as you scroll.
 - **Pinned galleries.** Each series page pins and turns vertical scroll into a horizontal strip, with a frame counter and progress bar. This works on phones too.
 - **Details.** A first-visit intro (skipped for the rest of the session), word-masked text reveals, clip-path image reveals, a magnetic call to action, a custom cursor with labels, and smooth scrolling.
+- **The light.** Osan means "afternoon", so the palette follows the actual time in Port Harcourt: cool morning, warm afternoon, peach golden hour, and a dark palette after 19:00. The light is chosen before first paint, so the page never flashes. Visitors can pin a light from the footer, next to a live clock and a golden-hour countdown. Each series also has its own colour, which tints its page.
+- **Easter eggs.** There are a few. The footer gives away one of them.
 - **Reduced motion.** With `prefers-reduced-motion` set, the intro, smooth scroll and cursor are skipped, transforms are turned off and the gallery becomes a plain stack.
 
 ## Performance
