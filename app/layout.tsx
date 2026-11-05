@@ -9,6 +9,9 @@ import Cursor from "@/components/Cursor";
 import SmoothScroll from "@/components/SmoothScroll";
 import Intro from "@/components/Intro";
 import { introScript } from "@/lib/intro";
+import { lightScript } from "@/lib/light";
+import ContactSheet from "@/components/ContactSheet";
+import EasterEggs from "@/components/EasterEggs";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
@@ -33,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f2efe9",
+  themeColor: "#f2ede4",
 };
 
 export default function RootLayout({
@@ -42,10 +45,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-light="afternoon"
       className={`${geist.variable} ${geistMono.variable} ${instrument.variable}`}
       suppressHydrationWarning
     >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: lightScript }} />
         <script dangerouslySetInnerHTML={{ __html: introScript }} />
       </head>
       <body>
@@ -56,6 +61,8 @@ export default function RootLayout({
           <Header />
           <main>{children}</main>
           <Footer />
+          <ContactSheet />
+          <EasterEggs />
         </MotionConfig>
       </body>
     </html>

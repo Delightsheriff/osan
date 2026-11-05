@@ -2,15 +2,29 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRef } from "react";
 import { motion } from "motion/react";
 import { nav, site } from "@/content/site";
+import { SHUTTER_EVENT } from "./EasterEggs";
 
 export default function Header() {
   const pathname = usePathname();
+  const clicks = useRef<number[]>([]);
+
+  // Five quick clicks on the logo while already home takes a picture.
+  const onLogo = () => {
+    if (pathname !== "/") return;
+    const now = performance.now();
+    clicks.current = [...clicks.current.filter((t) => now - t < 2000), now];
+    if (clicks.current.length >= 5) {
+      clicks.current = [];
+      window.dispatchEvent(new Event(SHUTTER_EVENT));
+    }
+  };
 
   return (
     <header className="gutter fixed inset-x-0 top-0 z-40 grid grid-cols-3 items-center py-5 text-white mix-blend-difference">
-      <Link href="/" className="text-[15px] font-medium tracking-tight">
+      <Link href="/" onClick={onLogo} className="w-fit select-none text-[15px] font-medium tracking-tight">
         {site.name}
         <sup className="label ml-0.5 align-super text-[9px]">®</sup>
       </Link>
@@ -25,7 +39,7 @@ export default function Header() {
                 <motion.span
                   layoutId="nav-underline"
                   className="absolute inset-x-0 -bottom-px h-px bg-current"
-                  transition={{ type: "spring", stiffness: 380, damping: 34 }}
+                  transition={{ type: "spring", duration: 0.4, bounce: 0 }}
                 />
               )}
             </Link>
@@ -35,7 +49,7 @@ export default function Header() {
 
       <p className="label hidden items-center justify-end gap-2 sm:flex">
         <span className="relative flex size-1.5">
-          <span className="absolute inline-flex size-full animate-ping rounded-full bg-current opacity-60" />
+          <span className="absolute inline-flex size-full motion-safe:animate-ping rounded-full bg-current opacity-60" />
           <span className="relative inline-flex size-1.5 rounded-full bg-current" />
         </span>
         {site.booking}

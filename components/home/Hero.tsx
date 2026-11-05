@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "motion/react";
 import type { Photo } from "@/content/series";
 import { site } from "@/content/site";
 import { introDelay } from "@/lib/intro";
+import Stamp from "./Stamp";
 
 export type Pill = { slug: string; title: string; photos: Photo[] };
 
@@ -79,15 +80,24 @@ export default function Hero({ pills }: { pills: Pill[] }) {
           {site.name} is a portrait practice in {site.city}. Small crews, no
           strobes, and as much time as the picture needs.
         </motion.p>
-        <div className="flex items-center gap-3 md:col-span-3 md:col-start-10 md:justify-end">
-          <span className="label text-mute">Scroll</span>
-          <span className="relative h-px w-16 overflow-hidden bg-line">
-            <motion.span
-              className="absolute inset-y-0 left-0 w-1/2 bg-ink"
-              animate={{ x: ["-100%", "200%"] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </span>
+        <div className="flex items-end justify-between gap-6 md:col-span-5 md:col-start-8 md:justify-end md:gap-10">
+          <div className="mb-2 flex items-center gap-3">
+            <span className="label text-mute">Scroll</span>
+            <span className="relative h-px w-16 overflow-hidden bg-line">
+              <motion.span
+                className="absolute inset-y-0 left-0 w-1/2 bg-ink"
+                animate={{ x: ["-100%", "200%"] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </span>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, rotate: -40 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ type: "spring", duration: 1.2, bounce: 0, delay: wait + 1.1 }}
+          >
+            <Stamp text="Book a sitting · Spring 2027 · " href="/contact" />
+          </motion.div>
         </div>
       </div>
     </section>
@@ -147,7 +157,7 @@ function HeroPill({ pill, order, wait }: { pill: Pill; order: number; wait: numb
               sizes={PILL_SIZES}
               loading="eager"
               placeholder="blur"
-              className="object-cover grayscale-[35%] transition duration-700 group-hover:scale-110 group-hover:grayscale-0"
+              className="photo-outline object-cover grayscale-[35%] transition-[scale,filter] duration-700 ease-[cubic-bezier(0.2,0,0,1)] group-hover:grayscale-0 motion-safe:group-hover:scale-110"
             />
           </motion.span>
         </AnimatePresence>
