@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "motion/react";
-import type { ElementType } from "react";
+import { Fragment, type ElementType } from "react";
 
 type Props = {
   /** Wrap a word in *asterisks* to set it in the italic serif accent. */
@@ -45,19 +45,18 @@ export default function RevealText({
         {words.map((w, i) => {
           const accent = w.startsWith("*") && w.endsWith("*");
           return (
-            <span
-              key={i}
-              className="inline-block overflow-hidden pb-[0.08em] -mb-[0.08em] align-bottom"
-            >
-              <motion.span
-                variants={word}
-                custom={delay + i * stagger}
-                className={`inline-block ${accent ? "accent" : ""}`}
-              >
-                {accent ? w.slice(1, -1) : w}
-              </motion.span>
+            <Fragment key={i}>
+              <span className="inline-block overflow-hidden pb-[0.08em] -mb-[0.08em] align-bottom">
+                <motion.span
+                  variants={word}
+                  custom={delay + i * stagger}
+                  className={`inline-block ${accent ? "accent" : ""}`}
+                >
+                  {accent ? w.slice(1, -1) : w}
+                </motion.span>
+              </span>
               {i < words.length - 1 && " "}
-            </span>
+            </Fragment>
           );
         })}
       </motion.span>
