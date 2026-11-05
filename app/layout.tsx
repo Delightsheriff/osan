@@ -1,16 +1,45 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { MotionConfig } from "motion/react";
 import "./globals.css";
+import { site } from "@/content/site";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Cursor from "@/components/Cursor";
+import SmoothScroll from "@/components/SmoothScroll";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
+const instrument = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: "italic",
+  variable: "--font-instrument",
+});
 
 export const metadata: Metadata = {
-  title: "Osan",
+  title: { default: `${site.name}: ${site.tagline}`, template: `%s · ${site.name}` },
+  description: site.description,
+};
+
+export const viewport: Viewport = {
+  themeColor: "#f2efe9",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${instrument.variable}`}>
+      <body>
+        <MotionConfig reducedMotion="user">
+          <SmoothScroll />
+          <Cursor />
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </MotionConfig>
+      </body>
     </html>
   );
 }
