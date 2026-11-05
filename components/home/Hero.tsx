@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { pexelsSrc, type Photo } from "@/content/series";
 import { site } from "@/content/site";
+import { introDelay } from "@/lib/intro";
 
 export type Pill = { slug: string; title: string; photos: Photo[] };
 
@@ -33,6 +34,9 @@ const tokens: Token[] = [
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export default function Hero({ pills }: { pills: Pill[] }) {
+  // Hold the headline back until the intro curtain lifts.
+  const [wait] = useState(introDelay);
+
   return (
     <section className="gutter flex min-h-svh flex-col justify-between pb-8 pt-28 md:pt-32">
       <div className="label flex justify-between text-mute">
@@ -46,14 +50,14 @@ export default function Hero({ pills }: { pills: Pill[] }) {
       >
         {tokens.map((t, i) =>
           "pill" in t ? (
-            <HeroPill key={i} pill={pills[t.pill]} order={i} />
+            <HeroPill key={i} pill={pills[t.pill]} order={i} wait={wait} />
           ) : (
             <span key={i} aria-hidden className="inline-block overflow-hidden pb-[0.06em] align-bottom">
               <motion.span
                 className={`inline-block ${t.word.startsWith("*") ? "accent" : ""}`}
                 initial={{ y: "110%" }}
                 animate={{ y: "0%" }}
-                transition={{ duration: 1.2, ease, delay: 0.15 + i * 0.05 }}
+                transition={{ duration: 1.2, ease, delay: wait + 0.15 + i * 0.05 }}
               >
                 {t.word.replaceAll("*", "")}
               </motion.span>
@@ -68,7 +72,7 @@ export default function Hero({ pills }: { pills: Pill[] }) {
           className="max-w-sm text-[15px] leading-relaxed text-ink-soft md:col-span-4"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease, delay: 1 }}
+          transition={{ duration: 1, ease, delay: wait + 1 }}
         >
           {site.name} is a portrait practice in {site.city}. Small crews, no
           strobes, and as much time as the picture needs.
@@ -88,7 +92,7 @@ export default function Hero({ pills }: { pills: Pill[] }) {
   );
 }
 
-function HeroPill({ pill, order }: { pill: Pill; order: number }) {
+function HeroPill({ pill, order, wait }: { pill: Pill; order: number; wait: number }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -110,7 +114,7 @@ function HeroPill({ pill, order }: { pill: Pill; order: number }) {
       className="mr-[0.25em] inline-block align-[-0.08em]"
       initial={{ width: 0, opacity: 0 }}
       animate={{ width: "1.9em", opacity: 1 }}
-      transition={{ duration: 1.2, ease, delay: 0.4 + order * 0.05 }}
+      transition={{ duration: 1.2, ease, delay: wait + 0.4 + order * 0.05 }}
     >
       <Link
         href={`/work/${pill.slug}`}
