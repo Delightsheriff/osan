@@ -1,163 +1,67 @@
-# JESSICA - Multidisciplinary Artist Portfolio
+# Osan
 
-![JESSICA Portfolio](https://placeholder.svg?height=300&width=800)
+A concept portfolio for a fictional portrait photography studio in Port Harcourt. Designed and built by [Delight Sheriff](https://github.com/Delightsheriff).
 
-A modern, responsive portfolio website for JESSICA, a multidisciplinary artist specializing in photography, creative direction, and music. This website showcases her work, services, and artistic vision through an elegant and interactive user experience.
+Osan is a design and motion exercise: an editorial, image-first site where the animation supports the photographs instead of competing with them.
 
-## 🚀 Features
+> **Credits.** Osan is not a real studio. Every photograph is by [Jessica Iroh](https://www.pexels.com/@jessicairoh/), used under the [Pexels licence](https://www.pexels.com/license/). The studio name, series titles and all copy are invented for this concept.
 
-- **Responsive Design**: Fully responsive layout that works beautifully on all devices.
-- **Interactive UI**: Smooth animations and transitions using Framer Motion.
-- **Portfolio Showcases**: Dedicated sections for photography, creative direction, and music.
-- **Contact Form**: Integrated contact form with email notifications using Resend.
-- **Dynamic Content**: Interactive galleries, lightboxes, and media players powered by Sanity CMS.
-- **SEO Optimized**: Built with best practices for search engine visibility.
+## Highlights
 
-## 💻 Technologies
+- **Morphing work index.** Grid, List, Feed and Full views share the same elements, so switching views animates each cover from its old position to its new one with shared layout animation. In List view a floating preview follows the cursor.
+- **Live headline.** The hero sentence contains small photo pills that cycle through each series. They link to their series, and the next frame is preloaded so the crossfade never waits.
+- **Scroll-driven opening.** A pill-shaped window opens to full bleed as you scroll.
+- **Pinned galleries.** Each series page pins and turns vertical scroll into a horizontal strip, with a frame counter and progress bar. This works on phones too.
+- **Details.** A first-visit intro (skipped for the rest of the session), word-masked text reveals, clip-path image reveals, a magnetic call to action, a custom cursor with labels, and smooth scrolling.
+- **Reduced motion.** With `prefers-reduced-motion` set, the intro, smooth scroll and cursor are skipped, transforms are turned off and the gallery becomes a plain stack.
 
-- **Framework**: [Next.js 15](https://nextjs.org/) with App Router
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with [shadcn/ui](https://ui.shadcn.com/) components
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **CMS**: [Sanity.io](https://www.sanity.io/)
-- **Email**: [Resend](https://resend.com/) with [React Email](https://react.email/)
-- **Deployment**: [Vercel](https://vercel.com/)
-- **Typography**: Google Fonts (Inter & Playfair Display)
-- **Linting/Formatting**: ESLint
+## Performance
 
-## ✅ Prerequisites
+- Photos are self-hosted 2000px WebP masters, imported statically. That gives exact dimensions (no layout shift), a generated blur placeholder and content-hashed, immutable caching.
+- `next/image` serves AVIF first, with trimmed `deviceSizes`/`imageSizes`, so srcsets are shorter and the cache is hit more often.
+- Only the true LCP image uses `preload` (the series cover). Other above-the-fold images use `loading="eager"`. Images positioned off-screen horizontally switch to eager loading as their section approaches, because native lazy loading never looks sideways.
+- Covers for a view are preloaded when you hover its button, so switching views never shows a blank frame.
+- Every route is statically generated.
 
-Before you begin, ensure you have the following installed:
+## Stack
 
-- [Node.js](https://nodejs.org/) (version 20.x or later recommended)
-- [npm](https://www.npmjs.com/) (comes with Node.js) or [yarn](https://yarnpkg.com/)
-- [Sanity CLI](https://www.sanity.io/docs/cli) (if you need to manage the Sanity Studio)
+Next.js 16 (App Router) · React 19 · Tailwind CSS 4 · Motion · Lenis · Zod
 
-## 🛠️ Getting Started
+## Running locally
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/jessica-portfolio.git
-    cd jessica-portfolio
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
-
-3.  **Set up environment variables:**
-    Create a `.env.local` file in the root of the project. You'll need to add configuration for Sanity and Resend. See the [Environment Variables](#environment-variables) section for more details.
-
-4.  **Run the development server:**
-    ```bash
-    npm run dev
-    # or
-    yarn dev
-    ```
-    The application will be available at `http://localhost:3000`.
-
-5.  **Run Sanity Studio (optional):**
-    If you need to work with the CMS content locally:
-    ```bash
-    cd sanity # Navigate to the sanity directory if it's separate
-    npm install # or yarn install (if it has its own package.json)
-    npx sanity dev
-    ```
-    The Sanity Studio will be available at `http://localhost:3333`.
-
-## 🔒 Environment Variables
-
-This project requires the following environment variables to be set in a `.env.local` file at the project root:
-
-```env
-# Sanity CMS Configuration
-NEXT_PUBLIC_SANITY_PROJECT_ID="..."
-NEXT_PUBLIC_SANITY_DATASET="..."
-NEXT_PUBLIC_SANITY_API_VERSION="..." # e.g., "2023-05-01"
-# To find these, go to your project's dashboard at manage.sanity.io
-
-# Resend API Key (for contact form)
-RESEND_API_KEY="..."
-# Your email address where contact form submissions will be sent
-EMAIL_SEND_TO="..."
+```bash
+npm install
+npm run dev
 ```
 
-**Note:** Never commit your `.env.local` file to version control. The `.gitignore` file should already be configured to ignore it.
+### Contact form
 
-## スタジオ Sanity Studio
+The form validates with a server action. To actually send email, set:
 
-This project uses Sanity.io as a headless CMS to manage dynamic content such as portfolio items, testimonials, and service descriptions.
-
--   The Sanity Studio is embedded within this Next.js project and can be accessed at the `/studio` route (e.g., `http://localhost:3000/studio`) when the development server is running.
--   Schema definitions for the content models are located in the `schemaTypes/` directory.
--   To deploy changes to your Sanity Studio (e.g., new schemas), you can run:
-    ```bash
-    npx sanity deploy
-    ```
-    This usually requires you to be logged in to Sanity via the CLI (`npx sanity login`).
-
-## 📜 Available Scripts
-
-In the `package.json`, you can find the following scripts:
-
--   `dev`: Starts the Next.js development server with Turbopack.
--   `build`: Builds the Next.js application for production.
--   `start`: Starts the Next.js production server.
--   `lint`: Runs ESLint to check for code quality and style issues.
-
-## 📂 Project Structure
-
-The project follows a standard Next.js App Router structure:
-
-```
-.
-├── app/                      # Main application directory (App Router)
-│   ├── (api)/                # API routes (e.g., for contact form)
-│   ├── (main pages)/         # Route groups for main site pages
-│   │   ├── about/
-│   │   ├── contact/
-│   │   ├── creative-direction/
-│   │   ├── music/
-│   │   ├── photography/
-│   │   ├── services/
-│   │   └── page.tsx          # Homepage
-│   ├── studio/               # Sanity Studio route
-│   ├── globals.css           # Global styles
-│   ├── layout.tsx            # Root layout
-│   └── ...                   # Other layout, error, loading files
-├── components/               # Reusable React components
-│   ├── ui/                   # UI components from shadcn/ui
-│   └── ...                   # Custom components
-├── sanity/                   # Sanity client and query configurations
-│   ├── sanity.client.ts
-│   └── sanity.query.ts
-├── schemaTypes/              # Sanity CMS schema definitions
-├── lib/                      # Utility functions and libraries
-│   ├── email.ts              # Email sending logic
-│   └── utils.ts              # General utility functions
-├── public/                   # Static assets (images, fonts, etc.)
-├── .env.local.example        # Example environment variables file (optional)
-├── next.config.ts            # Next.js configuration
-├── sanity.config.ts          # Sanity Studio configuration
-├── package.json              # Project dependencies and scripts
-└── README.md                 # This file
+```bash
+RESEND_API_KEY=...
+CONTACT_TO=you@example.com
+CONTACT_FROM="Osan <studio@yourdomain.com>"   # optional
 ```
 
-## 🤝 Contributing
+Without these the form validates and shows the confirmation state, but sends nothing.
 
-Contributions are welcome! If you'd like to contribute, please follow these steps:
+### Photos
 
-1.  Fork the repository.
-2.  Create a new branch (`git checkout -b feature/your-feature-name`).
-3.  Make your changes.
-4.  Commit your changes (`git commit -m 'Add some feature'`).
-5.  Push to the branch (`git push origin feature/your-feature-name`).
-6.  Open a Pull Request.
+Series membership lives in `content/photo-ids.json` (Pexels photo ids). To add or change photos:
 
-Please ensure your code adheres to the project's coding standards and that all tests pass (if applicable).
+```bash
+node scripts/fetch-photos.mjs
+```
 
-## 📄 License
+This downloads any missing photos, writes 2000px WebP masters to `assets/photos/`, and regenerates `content/images.ts`. Series copy lives in `content/series.ts`.
 
-This project is licensed under the MIT License. See the `LICENSE` file for more details (if a LICENSE file exists, otherwise state "MIT Licensed").
+## Structure
+
+```
+app/            routes: home, work, work/[slug], about, contact
+components/     layout shell, motion primitives, home/, work/, series/
+content/        site config, series copy, photo ids, generated image imports
+assets/photos/  self-hosted photo masters
+scripts/        photo pipeline
+```
