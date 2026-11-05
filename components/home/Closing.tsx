@@ -17,10 +17,10 @@ export default function Closing() {
       <Magnetic>
         <Link
           href="/contact"
-          className="group relative flex size-36 items-center justify-center overflow-hidden rounded-full bg-ink text-paper md:size-44"
+          className="group relative flex size-36 items-center justify-center overflow-hidden rounded-full bg-ink text-paper transition-[scale] duration-150 ease-out active:scale-[0.96] md:size-44"
         >
-          <span className="absolute inset-0 translate-y-full rounded-full bg-ink-soft transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
-          <span className="label relative">Book a sitting</span>
+          <span className="absolute inset-0 translate-y-full rounded-full bg-sun transition-[translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0" />
+          <span className="label relative transition-[color] duration-300 group-hover:text-deep">Book a sitting</span>
         </Link>
       </Magnetic>
     </section>

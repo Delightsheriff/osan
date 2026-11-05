@@ -39,17 +39,17 @@ export default function Opening({ photo, slug, title, meta }: Props) {
         </motion.div>
 
         <motion.div
-          className="gutter absolute inset-x-0 bottom-0 flex items-end justify-between pb-8 text-paper"
+          className="gutter absolute inset-x-0 bottom-0 flex items-end justify-between pb-8 text-on-deep"
           style={{ opacity: captionOpacity, y: captionY }}
         >
           <div>
-            <p className="label mb-3 text-paper/70">{meta}</p>
+            <p className="label mb-3 text-on-deep/70">{meta}</p>
             <p className="display text-[clamp(3rem,8vw,8rem)]">{title}</p>
           </div>
           <Link
             href={`/work/${slug}`}
             data-cursor="Open"
-            className="label mb-3 rounded-full border border-paper/40 px-4 py-2.5 transition-colors hover:bg-paper hover:text-ink"
+            className="label mb-3 rounded-full border border-on-deep/40 px-4 py-2.5 transition-[background-color,color,scale] duration-150 ease-out hover:bg-on-deep hover:text-deep active:scale-[0.96]"
           >
             View series →
           </Link>

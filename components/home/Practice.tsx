@@ -23,10 +23,10 @@ export default function Practice({ stats }: { stats: Stat[] }) {
             <motion.div
               key={s.label}
               className="flex flex-col"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+              transition={{ duration: 0.3, ease: "easeOut", delay: i * 0.1 }}
             >
               <dt className="label order-2 mt-2 text-mute">{s.label}</dt>
               <dd className="order-1 text-4xl tracking-tight md:text-5xl">{s.value}</dd>

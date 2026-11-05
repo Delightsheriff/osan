@@ -51,7 +51,7 @@ export default function Cursor() {
       <motion.div
         className="flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-ink text-paper"
         animate={{ width: label ? 84 : 8, height: label ? 84 : 8 }}
-        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        transition={{ type: "spring", duration: 0.3, bounce: 0 }}
       >
         <AnimatePresence>
           {label && (

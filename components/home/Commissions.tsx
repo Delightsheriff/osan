@@ -30,12 +30,12 @@ export default function Commissions() {
           <motion.li
             key={o.title}
             className="group grid gap-4 border-b border-line py-8 first:pt-0 md:grid-cols-9 md:gap-8"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+            transition={{ duration: 0.3, ease: "easeOut", delay: i * 0.1 }}
           >
-            <span className="label text-mute md:col-span-1">0{i + 1}</span>
+            <span className="label text-accent md:col-span-1">0{i + 1}</span>
             <h3 className="text-3xl leading-none tracking-[-0.035em] md:col-span-4 md:text-4xl">
               {o.title}
             </h3>

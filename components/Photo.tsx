@@ -36,7 +36,7 @@ export default function Photo({
       preload={preload}
       loading={preload ? undefined : loading}
       placeholder="blur"
-      {...(fill ? { fill: true, className: "object-cover" } : { className: "h-auto w-full" })}
+      {...(fill ? { fill: true, className: "photo-outline object-cover" } : { className: "photo-outline h-auto w-full" })}
     />
   );
 

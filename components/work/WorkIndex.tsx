@@ -21,6 +21,8 @@ type Filter = "All" | Category;
 
 const morph: Transition = { duration: 0.9, ease: [0.76, 0, 0.24, 1] };
 const fade: Transition = { duration: 0.5, ease: [0.16, 1, 0.3, 1] };
+const leave = { opacity: 0, y: -12, filter: "blur(4px)", transition: { duration: 0.15, ease: "easeOut" } } as const;
+const press = "transition-[color,scale] duration-150 ease-out enabled:active:scale-[0.96]";
 
 const layouts: Record<View, { list: string; card: string; cover: string; sizes: string }> = {
   Grid: {
@@ -104,7 +106,7 @@ export default function WorkIndex({
               <li key={c}>
                 <button
                   onClick={() => setFilter(c)}
-                  className={`transition-colors ${filter === c ? "text-ink" : "text-mute hover:text-ink"}`}
+                  className={`${press} ${filter === c ? "text-ink" : "text-mute hover:text-ink"}`}
                 >
                   {c}
                 </button>
@@ -121,7 +123,7 @@ export default function WorkIndex({
               onPointerEnter={() => warm(v)}
               onFocus={() => warm(v)}
               aria-pressed={view === v}
-              className={`relative text-[clamp(1.25rem,2vw,1.75rem)] tracking-tight transition-colors ${
+              className={`relative text-[clamp(1.25rem,2vw,1.75rem)] tracking-tight ${press} ${
                 view === v ? "text-ink" : "text-mute/60 hover:text-mute"
               }`}
             >
@@ -150,7 +152,7 @@ export default function WorkIndex({
                 whileInView={{ opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } }}
                 viewport={{ once: true, margin: "0px 0px -8% 0px" }}
                 whileTap={{ scale: 0.985 }}
-                exit={{ opacity: 0, scale: 0.94, transition: fade }}
+                exit={leave}
                 onPointerEnter={() => view === "List" && setHovered(card)}
                 onPointerLeave={() => setHovered(null)}
               >
@@ -171,7 +173,7 @@ export default function WorkIndex({
                         fill
                         sizes={l.sizes}
                         placeholder="blur"
-                        className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                        className="photo-outline object-cover transition-[scale] duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:group-hover:scale-[1.04]"
                       />
                     </motion.div>
                     {view === "Full" && (
@@ -185,7 +187,7 @@ export default function WorkIndex({
                       layout="position"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1, transition: { ...fade, delay: 0.45 } }}
-                      exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                      exit={leave}
                       className={view === "Full" ? "absolute inset-x-0 bottom-0" : "contents"}
                     >
                       <Meta view={view} card={card} index={cards.indexOf(card) + 1} />
@@ -211,7 +213,10 @@ function Meta({ view, card, index }: { view: View; card: SeriesCard; index: numb
       <>
         <div className="flex items-baseline gap-4 md:gap-8">
           <span className="label hidden text-mute sm:inline">{n}</span>
-          <span className="text-[clamp(1.5rem,4vw,3.5rem)] leading-none tracking-[-0.04em] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3">
+          <span
+            style={{ "--row": card.tone } as React.CSSProperties}
+            className="text-[clamp(1.5rem,4vw,3.5rem)] leading-none tracking-[-0.04em] transition-[color] duration-150 group-hover:text-[color-mix(in_oklch,var(--row)_68%,var(--ink))]"
+          >
             {card.title}
           </span>
         </div>
@@ -226,14 +231,15 @@ function Meta({ view, card, index }: { view: View; card: SeriesCard; index: numb
 
   if (view === "Full") {
     return (
-      <div className="gutter flex items-end justify-between pb-8 text-paper">
+      <div className="gutter flex items-end justify-between pb-8 text-on-deep">
         <div>
-          <p className="label mb-3 text-paper/70">
+          <p className="label mb-3 flex items-center gap-2 text-on-deep/70">
+            <span className="size-1.5 rounded-full" style={{ backgroundColor: card.tone }} />
             {n} · {card.category}
           </p>
           <p className="display text-[clamp(3rem,9vw,9rem)]">{card.title}</p>
         </div>
-        <p className="label mb-3 hidden text-right text-paper/70 sm:block">
+        <p className="label mb-3 hidden text-right text-on-deep/70 sm:block">
           {card.city}
           <br />
           {card.date}
@@ -287,8 +293,8 @@ function ListPreview({ card }: { card: SeriesCard | null }) {
             className="relative aspect-[4/5] overflow-hidden"
             initial={{ clipPath: "inset(50% 50% 50% 50%)" }}
             animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
-            exit={{ clipPath: "inset(50% 50% 50% 50%)", transition: { duration: 0.35 } }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ clipPath: "inset(50% 50% 50% 50%)", transition: { duration: 0.15, ease: "easeOut" } }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           >
             <Image
               src={card.cover}
@@ -296,7 +302,7 @@ function ListPreview({ card }: { card: SeriesCard | null }) {
               fill
               sizes="320px"
               placeholder="blur"
-              className="object-cover"
+              className="photo-outline object-cover"
             />
           </motion.div>
         )}

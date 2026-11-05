@@ -14,7 +14,7 @@ export default function ContactForm() {
   const values = state.status === "error" ? state.values : {};
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       {state.status === "sent" ? (
         <motion.div
           key="sent"
@@ -32,7 +32,7 @@ export default function ContactForm() {
         <motion.form
           key="form"
           action={action}
-          exit={{ opacity: 0, y: -16, transition: { duration: 0.4 } }}
+          exit={{ opacity: 0, y: -12, filter: "blur(4px)", transition: { duration: 0.15, ease: "easeOut" } }}
           className="space-y-10"
           noValidate
         >
@@ -46,13 +46,13 @@ export default function ContactForm() {
                   type="button"
                   onClick={() => setKind(k)}
                   aria-pressed={kind === k}
-                  className="relative rounded-full border border-line px-4 py-2 text-sm transition-colors aria-pressed:text-paper"
+                  className="relative rounded-full border border-line px-4 py-2 text-sm transition-[color,scale] duration-150 ease-out enabled:active:scale-[0.96] aria-pressed:text-paper"
                 >
                   {kind === k && (
                     <motion.span
                       layoutId="kind-pill"
                       className="absolute inset-0 rounded-full bg-ink"
-                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                      transition={{ type: "spring", duration: 0.3, bounce: 0 }}
                     />
                   )}
                   <span className="relative">{k}</span>
@@ -71,10 +71,10 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={pending}
-            className="group flex w-full items-center justify-between border-t border-ink pt-5 text-[clamp(1.5rem,3vw,2.5rem)] tracking-[-0.03em] disabled:opacity-50"
+            className="group flex w-full items-center justify-between border-t border-ink pt-5 text-[clamp(1.5rem,3vw,2.5rem)] tracking-[-0.03em] transition-[scale,opacity] duration-150 ease-out enabled:active:scale-[0.96] disabled:opacity-50"
           >
             {pending ? "Sending…" : "Send enquiry"}
-            <span className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2">→</span>
+            <span className="transition-[translate] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:group-hover:translate-x-2">→</span>
           </button>
         </motion.form>
       )}
@@ -117,8 +117,8 @@ function Field({
           <motion.p
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="label mt-2 text-[#9b3b2a]"
+            exit={{ opacity: 0, height: 0, transition: { duration: 0.15, ease: "easeOut" } }}
+            className="label mt-2 text-[color-mix(in_oklch,#c0392b_75%,var(--ink))]"
             role="alert"
           >
             {error}
