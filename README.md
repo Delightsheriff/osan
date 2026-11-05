@@ -1,33 +1,65 @@
 # Osan
 
-A concept portfolio for a fictional portrait photography studio in Port Harcourt. Designed and built by [Delight Sheriff](https://github.com/Delightsheriff).
+**Live:** [osan-psi.vercel.app](https://osan-psi.vercel.app)
 
-Osan is a design and motion exercise: an editorial, image-first site where the animation supports the photographs instead of competing with them.
+Osan is a portfolio site for a fictional portrait studio in Port Harcourt. I designed and built it as a design and motion study. The site is editorial and puts the images first, and every animation exists to serve the photographs, not to compete with them.
 
-> **Credits.** Osan is not a real studio. Every photograph is by [Jessica Iroh](https://www.pexels.com/@jessicairoh/), used under the [Pexels licence](https://www.pexels.com/license/). The studio name, series titles and all copy are invented for this concept.
+> **Credits.** Osan is not a real studio. Every photograph is by [Jessica Iroh](https://www.pexels.com/@jessicairoh/), used under the [Pexels licence](https://www.pexels.com/license/). The studio name, series titles and all copy are invented. Design and code by [Delight Sheriff](https://github.com/Delightsheriff).
 
-## Highlights
+## What's in it
 
-- **Morphing work index.** Grid, List, Feed and Full views share the same elements, so switching views animates each cover from its old position to its new one with shared layout animation. In List view a floating preview follows the cursor.
-- **Live headline.** The hero sentence contains small photo pills that cycle through each series. They link to their series, and the next frame is preloaded so the crossfade never waits.
-- **Scroll-driven opening.** A pill-shaped window opens to full bleed as you scroll.
-- **Pinned galleries.** Each series page pins and turns vertical scroll into a horizontal strip, with a frame counter and progress bar. This works on phones too.
-- **Details.** A first-visit intro (skipped for the rest of the session), word-masked text reveals, clip-path image reveals, a magnetic call to action, a custom cursor with labels, and smooth scrolling.
-- **The light.** Osan means "afternoon", so the palette follows the actual time in Port Harcourt: cool morning, warm afternoon, peach golden hour, and a dark palette after 19:00. The light is chosen before first paint, so the page never flashes. Visitors can pin a light from the footer, next to a live clock and a golden-hour countdown. Each series also has its own colour, which tints its page.
-- **Easter eggs.** There are a few. The footer gives away one of them.
-- **Reduced motion.** With `prefers-reduced-motion` set, the intro, smooth scroll and cursor are skipped, transforms are turned off and the gallery becomes a plain stack.
+| Page | What happens |
+| --- | --- |
+| **Home** | The hero sentence carries small photo pills that cycle through the series, and each pill links to its series. As you scroll, a pill-shaped window opens to full bleed. A rotating stamp shows the booking status. |
+| **Work** | One index with four views: Grid, List, Feed and Full. Every view renders the same elements, so switching animates each cover from where it was to where it lands. In List view a preview follows the cursor. You can filter by category. |
+| **Series** | Each series page pins in place and turns vertical scroll into a horizontal strip, with a frame counter and a progress bar. It works on phones too. The page takes on the series' own colour. |
+| **About / Contact** | Studio copy and a validated contact form. |
+
+### The light
+
+*Osan* means "afternoon" in Yoruba, so the palette follows the real time in Port Harcourt:
+
+- **Morning** (06:00–10:59): cool and pale
+- **Afternoon** (11:00–16:59): warm paper
+- **Golden hour** (17:00–18:59): peach
+- **Night** (19:00–05:59): dark
+
+A small inline script chooses the light before first paint, so the page never flashes the wrong palette. The footer shows a live Port Harcourt clock and a countdown to golden hour, and lets you pin any light. That choice is saved in `localStorage`. Changing the light uses a View Transition, and other transitions are switched off during the swap so colours don't smear.
+
+### Details
+
+- A first-visit intro, skipped for the rest of the session
+- Word-masked text reveals, clip-path image reveals and a magnetic call to action
+- A custom cursor with contextual labels (only on fine pointers)
+- Smooth scrolling with Lenis, driven by Motion's frame loop
+- A contact sheet of every frame, which opens with **C**
+- A few easter eggs. The footer and the browser console each give one away.
+
+### Reduced motion
+
+With `prefers-reduced-motion` set, the intro, smooth scrolling and custom cursor are skipped. Transforms are swapped for opacity fades, and the pinned gallery becomes a plain vertical stack.
 
 ## Performance
 
-- Photos are self-hosted 2000px WebP masters, imported statically. That gives exact dimensions (no layout shift), a generated blur placeholder and content-hashed, immutable caching.
-- `next/image` serves AVIF first, with trimmed `deviceSizes`/`imageSizes`, so srcsets are shorter and the cache is hit more often.
-- Only the true LCP image uses `preload` (the series cover). Other above-the-fold images use `loading="eager"`. Images positioned off-screen horizontally switch to eager loading as their section approaches, because native lazy loading never looks sideways.
-- Covers for a view are preloaded when you hover its button, so switching views never shows a blank frame.
-- Every route is statically generated.
+The photos came from Pexels, and loading them from there cost 1–1.4 s per image. They are now self-hosted, which cut that to milliseconds once cached.
+
+- **Static imports.** Photos are 2000px WebP masters in `assets/photos`, imported statically. That gives exact dimensions (no layout shift), a generated blur placeholder and content-hashed, immutable caching.
+- **Tuned `next/image`.** AVIF is served first, with trimmed `deviceSizes` and `imageSizes`. That makes srcsets shorter and cache hits more frequent. A typical cover is about 75 KB as AVIF, against 152 KB before.
+- **Loading priority.** Only the real LCP image uses `preload`. Other above-the-fold images use `loading="eager"`.
+- **Off-screen images.** Images placed off-screen horizontally switch to eager loading as their section approaches, because native lazy loading never looks sideways.
+- **Warm before switching.** Covers for a view are preloaded when you hover or focus its button. The hero preloads its next frame before the crossfade.
+- **Code splitting.** The contact sheet imports every photo, so it is a separate chunk that loads the first time it opens.
+- **Static routes.** All 16 routes are statically generated.
 
 ## Stack
 
-Next.js 16 (App Router) · React 19 · Tailwind CSS 4 · Motion · Lenis · Zod
+- [Next.js 16](https://nextjs.org) (App Router, Turbopack)
+- React 19
+- Tailwind CSS 4
+- [Motion](https://motion.dev)
+- [Lenis](https://lenis.darkroom.engineering)
+- Zod
+- [Resend](https://resend.com) (optional)
 
 ## Running locally
 
@@ -36,9 +68,11 @@ npm install
 npm run dev
 ```
 
+Open http://localhost:3000. Run `npm run build` for a production build and `npm run lint` to lint.
+
 ### Contact form
 
-The form validates with a server action. To actually send email, set:
+The form posts to a server action and is validated with Zod. To actually send email, add these to `.env.local`:
 
 ```bash
 RESEND_API_KEY=...
@@ -46,24 +80,32 @@ CONTACT_TO=you@example.com
 CONTACT_FROM="Osan <studio@yourdomain.com>"   # optional
 ```
 
-Without these the form validates and shows the confirmation state, but sends nothing.
+Without them the form still validates and shows its confirmation, but sends nothing.
 
-### Photos
+### Changing photos
 
-Series membership lives in `content/photo-ids.json` (Pexels photo ids). To add or change photos:
+Series membership is defined in `content/photo-ids.json`, as Pexels photo ids. After editing it, run:
 
 ```bash
 node scripts/fetch-photos.mjs
 ```
 
-This downloads any missing photos, writes 2000px WebP masters to `assets/photos/`, and regenerates `content/images.ts`. Series copy lives in `content/series.ts`.
+The script downloads any missing photos, writes 2000px WebP masters to `assets/photos/` and regenerates `content/images.ts`. Titles, stories and tones for each series live in `content/series.ts`.
 
-## Structure
+## Project structure
 
 ```
-app/            routes: home, work, work/[slug], about, contact
-components/     layout shell, motion primitives, home/, work/, series/
-content/        site config, series copy, photo ids, generated image imports
-assets/photos/  self-hosted photo masters
-scripts/        photo pipeline
+app/              routes: home, work, work/[slug], about, contact
+components/       shell (header, footer, cursor, intro), motion primitives
+  home/           hero, opening, practice, commissions, stamp
+  work/           the morphing work index
+  series/         pinned horizontal gallery, series hero, page tint
+content/          site config, series copy, photo ids, generated imports
+lib/              light schedule, intro timing, media-query hooks
+assets/photos/    self-hosted photo masters
+scripts/          photo pipeline
 ```
+
+## Deployment
+
+The site deploys on Vercel. Every push to `main` ships to production.
