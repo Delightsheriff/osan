@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { preload } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 import type { Photo } from "@/content/series";
 import { site } from "@/content/site";
@@ -32,6 +33,7 @@ const tokens: Token[] = [
 ];
 
 const ease = [0.16, 1, 0.3, 1] as const;
+const PILL_SIZES = "12rem";
 
 export default function Hero({ pills }: { pills: Pill[] }) {
   // Hold the headline back until the intro curtain lifts.
@@ -109,6 +111,13 @@ function HeroPill({ pill, order, wait }: { pill: Pill; order: number; wait: numb
 
   const photo = pill.photos[index];
 
+  // Fetch the next frame while this one is showing, so the crossfade never waits.
+  useEffect(() => {
+    const next = pill.photos[(index + 1) % pill.photos.length];
+    const { props } = getImageProps({ src: next, alt: "", fill: true, sizes: PILL_SIZES });
+    preload(props.src, { as: "image", imageSrcSet: props.srcSet, imageSizes: props.sizes });
+  }, [index, pill.photos]);
+
   return (
     <motion.span
       className="mr-[0.25em] inline-block align-[-0.08em]"
@@ -135,7 +144,7 @@ function HeroPill({ pill, order, wait }: { pill: Pill; order: number; wait: numb
               src={photo}
               alt=""
               fill
-              sizes="12rem"
+              sizes={PILL_SIZES}
               loading="eager"
               placeholder="blur"
               className="object-cover grayscale-[35%] transition duration-700 group-hover:scale-110 group-hover:grayscale-0"

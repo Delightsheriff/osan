@@ -97,9 +97,9 @@ export default function WorkIndex({
           </sup>
         </h2>
 
-        <div className="flex gap-10 md:col-span-3">
+        <div className="flex gap-6 md:col-span-3 md:gap-10">
           <p className="label text-mute">Filter</p>
-          <ul className="label space-y-1">
+          <ul className="label flex flex-wrap gap-x-4 gap-y-1.5 md:block md:space-y-1">
             {(["All", ...categories] as Filter[]).map((c) => (
               <li key={c}>
                 <button
@@ -146,8 +146,10 @@ export default function WorkIndex({
                 key={card.slug}
                 layout
                 transition={morph}
-                initial={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } }}
+                viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+                whileTap={{ scale: 0.985 }}
                 exit={{ opacity: 0, scale: 0.94, transition: fade }}
                 onPointerEnter={() => view === "List" && setHovered(card)}
                 onPointerLeave={() => setHovered(null)}

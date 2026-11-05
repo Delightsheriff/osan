@@ -1,29 +1,38 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "motion/react";
+import {
+  motion,
+  useInView,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
 import Photo from "@/components/Photo";
 import type { Photo as PhotoData } from "@/content/series";
 
 type Props = { photos: PhotoData[]; title: string };
 
 /**
- * Desktop: the section pins and vertical scroll drives the strip sideways.
- * Mobile: a plain vertical stack.
+ * The section pins and vertical scroll drives the strip sideways, on every
+ * screen size. With reduced motion it falls back to a plain vertical stack.
  */
 export default function HorizontalGallery({ photos, title }: Props) {
-  return (
-    <>
-      <div className="hidden md:block">
-        <Pinned photos={photos} title={title} />
-      </div>
-      <div className="gutter flex flex-col gap-4 md:hidden">
+  const reduce = useReducedMotion();
+
+  if (reduce) {
+    return (
+      <div className="gutter mx-auto flex max-w-3xl flex-col gap-4">
         {photos.map((p, i) => (
-          <Photo key={p.id} photo={p} alt={`${title}, frame ${i + 1}`} sizes="100vw" />
+          <Photo key={p.id} photo={p} alt={`${title}, frame ${i + 1}`} sizes="(min-width: 768px) 48rem, 100vw" reveal={false} />
         ))}
       </div>
-    </>
-  );
+    );
+  }
+
+  return <Pinned photos={photos} title={title} />;
 }
 
 function Pinned({ photos, title }: Props) {
@@ -31,6 +40,9 @@ function Pinned({ photos, title }: Props) {
   const track = useRef<HTMLDivElement>(null);
   const [distance, setDistance] = useState(0);
   const [frame, setFrame] = useState(1);
+  // Frames sit off to the right, where native lazy loading never looks, so
+  // switch them all to eager once the section is about a screen away.
+  const near = useInView(section, { once: true, margin: "100% 0px 100% 0px" });
 
   useLayoutEffect(() => {
     const el = track.current;
@@ -58,17 +70,18 @@ function Pinned({ photos, title }: Props) {
   return (
     <section ref={section} style={{ height: `calc(100svh + ${distance}px)` }} className="relative">
       <div className="sticky top-0 flex h-svh flex-col justify-center overflow-hidden">
-        <motion.div ref={track} style={{ x: smoothX }} className="gutter flex w-max items-center gap-6">
+        <motion.div ref={track} style={{ x: smoothX }} className="gutter flex w-max items-center gap-3 md:gap-6">
           {photos.map((p, i) => (
             <figure
               key={p.id}
-              className="relative h-[70svh] shrink-0"
+              className="relative h-[56svh] shrink-0 md:h-[70svh]"
               style={{ aspectRatio: `${p.width} / ${p.height}` }}
             >
               <Photo
                 photo={p}
                 alt={`${title}, frame ${i + 1}`}
-                sizes={`${Math.round((70 * p.width) / p.height)}vh`}
+                sizes={`(min-width: 768px) ${Math.round((70 * p.width) / p.height)}vh, ${Math.round((56 * p.width) / p.height)}vh`}
+                loading={near ? "eager" : "lazy"}
                 fill
                 className="h-full w-full"
               />
@@ -79,7 +92,7 @@ function Pinned({ photos, title }: Props) {
           ))}
         </motion.div>
 
-        <div className="gutter absolute inset-x-0 bottom-8 flex items-center gap-6">
+        <div className="gutter absolute inset-x-0 bottom-6 flex items-center gap-4 md:bottom-8 md:gap-6">
           <span className="label tabular-nums">
             {String(frame).padStart(2, "0")} / {String(photos.length).padStart(2, "0")}
           </span>

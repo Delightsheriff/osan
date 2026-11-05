@@ -29,6 +29,7 @@
   }
 
   body {
+    -webkit-tap-highlight-color: transparent;
     font-family: var(--font-sans);
     background: var(--color-paper);
     min-height: 100svh;
@@ -37,6 +38,13 @@
   ::selection {
     background: var(--color-ink);
     color: var(--color-paper);
+  }
+
+  a,
+  button,
+  input,
+  textarea {
+    touch-action: manipulation;
   }
 
   :focus-visible {
