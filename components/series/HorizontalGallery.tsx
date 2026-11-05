@@ -97,7 +97,7 @@ function Pinned({ photos, title }: Props) {
             {String(frame).padStart(2, "0")} / {String(photos.length).padStart(2, "0")}
           </span>
           <span className="relative h-px flex-1 bg-line">
-            <motion.span className="absolute inset-y-0 left-0 bg-ink" style={{ width: bar }} />
+            <motion.span className="absolute inset-y-0 left-0 bg-tone" style={{ width: bar }} />
           </span>
           <span className="label text-mute">Scroll</span>
         </div>

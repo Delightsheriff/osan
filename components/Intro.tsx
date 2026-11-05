@@ -32,12 +32,12 @@ export default function Intro() {
   return (
     <motion.div
       aria-hidden
-      className="intro gutter fixed inset-0 z-[90] flex flex-col justify-between bg-ink py-6 text-paper"
+      className="intro gutter fixed inset-0 z-[90] flex flex-col justify-between bg-deep py-6 text-on-deep"
       initial={false}
       animate={done ? { clipPath: "inset(0% 0% 100% 0%)" } : { clipPath: "inset(0% 0% 0% 0%)" }}
       transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
     >
-      <div className="label flex justify-between text-paper/50">
+      <div className="label flex justify-between text-on-deep/50">
         <span>{site.tagline}</span>
         <span>{site.city}</span>
       </div>
@@ -55,7 +55,7 @@ export default function Intro() {
             </motion.span>
           ))}
         </p>
-        <motion.span className="label mb-[1.2em] tabular-nums text-paper/60">{label}</motion.span>
+        <motion.span className="label mb-[1.2em] tabular-nums text-on-deep/60">{label}</motion.span>
       </div>
     </motion.div>
   );

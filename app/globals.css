@@ -1,12 +1,17 @@
 @import "tailwindcss";
 
-@theme {
-  --color-paper: #f2efe9;
-  --color-paper-2: #e8e3da;
-  --color-ink: #141311;
-  --color-ink-soft: #3b3833;
-  --color-mute: #8b857b;
-  --color-line: rgb(20 19 17 / 0.12);
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-mute: var(--mute);
+  --color-line: var(--line);
+  --color-sun: var(--sun);
+  --color-tone: var(--tone);
+  --color-accent: var(--accent);
+  --color-deep: var(--deep);
+  --color-on-deep: var(--on-deep);
 
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -16,13 +21,73 @@
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-@layer base {
-  :root {
-    color-scheme: light;
-  }
+/*
+ * The light. Osan means "afternoon", so the palette follows the time of day in
+ * Port Harcourt (set before paint by lib/light.ts). Visitors can pin a light
+ * from the footer. Series pages override --tone with the colour of their photos.
+ */
+:root,
+:root[data-light="afternoon"] {
+  color-scheme: light;
+  --paper: #f2ede4;
+  --paper-2: #e7e0d3;
+  --ink: #16130f;
+  --ink-soft: #3c362e;
+  --mute: #857d70;
+  --sun: #b5832a;
+  --image-outline: oklch(0 0 0 / 0.1);
+}
 
+:root[data-light="morning"] {
+  color-scheme: light;
+  --paper: #eceeea;
+  --paper-2: #dfe3de;
+  --ink: #121517;
+  --ink-soft: #353b3f;
+  --mute: #7b8288;
+  --sun: #4f7fa6;
+  --image-outline: oklch(0 0 0 / 0.1);
+}
+
+:root[data-light="golden"] {
+  color-scheme: light;
+  --paper: #f3e3cf;
+  --paper-2: #ead2b6;
+  --ink: #24160e;
+  --ink-soft: #4a3324;
+  --mute: #95765f;
+  --sun: #c4552b;
+  --image-outline: oklch(0 0 0 / 0.1);
+}
+
+:root[data-light="night"] {
+  color-scheme: dark;
+  --paper: #11100e;
+  --paper-2: #1d1b18;
+  --ink: #ede6da;
+  --ink-soft: #c5bdb0;
+  --mute: #8c8478;
+  --sun: #e0a94a;
+  --image-outline: oklch(1 0 0 / 0.1);
+}
+
+:root {
+  --tone: var(--sun);
+  /* Tones are mid-values; pull them toward the ink so they pass as text. */
+  --accent: color-mix(in oklch, var(--tone) 68%, var(--ink));
+  --line: color-mix(in oklch, var(--ink) 13%, transparent);
+  --deep: #0e0d0b;
+  --on-deep: #ede6da;
+}
+
+/* A series page washes the paper with its own tone. */
+:root[data-tinted] {
+  --page: color-mix(in oklch, var(--paper) 90%, var(--tone));
+}
+
+@layer base {
   html {
-    background: var(--color-paper);
+    background: var(--page, var(--paper));
     color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -31,13 +96,14 @@
   body {
     -webkit-tap-highlight-color: transparent;
     font-family: var(--font-sans);
-    background: var(--color-paper);
+    background: var(--page, var(--paper));
     min-height: 100svh;
+    transition: background-color 700ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   ::selection {
-    background: var(--color-ink);
-    color: var(--color-paper);
+    background: var(--tone);
+    color: var(--deep);
   }
 
   a,
@@ -84,6 +150,7 @@ html.lenis body {
 }
 
 @utility accent {
+  color: var(--accent);
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
@@ -98,4 +165,22 @@ html.has-cursor * {
 
 html.intro-skip .intro {
   display: none;
+}
+
+/* Content photos get a hairline in pure black or white so light edges read. */
+@utility photo-outline {
+  outline: 1px solid var(--image-outline);
+  outline-offset: -1px;
+}
+
+/* Applied for one frame while the light changes, so colours swap cleanly. */
+.light-switching,
+.light-switching * {
+  transition: none !important;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 600ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }

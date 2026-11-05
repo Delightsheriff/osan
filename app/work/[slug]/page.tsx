@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import RevealText from "@/components/RevealText";
 import HorizontalGallery from "@/components/series/HorizontalGallery";
 import SeriesHero from "@/components/series/SeriesHero";
+import SeriesTone from "@/components/series/SeriesTone";
 import { getSeries, series } from "@/content/series";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -38,8 +39,10 @@ export default async function SeriesPage({ params }: Props) {
 
   return (
     <article>
+      <SeriesTone tone={s.tone} />
       <header className="gutter pb-12 pt-32 md:pt-44">
-        <p className="label mb-6 text-mute">
+        <p className="label mb-6 flex items-center gap-2 text-mute">
+          <span className="size-1.5 rounded-full bg-tone" />
           Series {String(index + 1).padStart(2, "0")} / {String(series.length).padStart(2, "0")}
         </p>
         <RevealText as="h1" immediate className="display text-[clamp(4rem,15vw,15rem)]" text={s.title} />
@@ -81,8 +84,11 @@ export default async function SeriesPage({ params }: Props) {
         className="gutter group relative mt-24 flex items-end justify-between overflow-hidden border-t border-line py-16 md:py-24"
       >
         <div className="relative z-10">
-          <p className="label mb-4 text-mute">Next series</p>
-          <p className="display text-[clamp(3.5rem,11vw,11rem)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-4">
+          <p className="label mb-4 flex items-center gap-2 text-mute">
+            <span className="size-1.5 rounded-full" style={{ backgroundColor: next.tone }} />
+            Next series
+          </p>
+          <p className="display text-[clamp(3.5rem,11vw,11rem)] transition-[translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:group-hover:translate-x-4">
             {next.title}
           </p>
         </div>
@@ -93,7 +99,7 @@ export default async function SeriesPage({ params }: Props) {
             fill
             sizes="12rem"
             placeholder="blur"
-            className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+            className="photo-outline object-cover transition-[scale] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:group-hover:scale-110"
           />
         </div>
       </Link>

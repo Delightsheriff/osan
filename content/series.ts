@@ -11,6 +11,8 @@ export type Series = {
   slug: keyof typeof ids;
   title: string;
   category: Category;
+  /** The series' own colour, sampled by eye from its photos. */
+  tone: string;
   city: string;
   date: string;
   year: number;
@@ -24,6 +26,7 @@ type SeriesCopy = Omit<Series, "photos">;
 const copy: SeriesCopy[] = [
   {
     slug: "senna",
+    tone: "#c99a2e",
     title: "Senna",
     category: "Portrait",
     city: "Port Harcourt",
@@ -37,6 +40,7 @@ const copy: SeriesCopy[] = [
   },
   {
     slug: "fan-study",
+    tone: "#4e86b8",
     title: "Fan Study",
     category: "Editorial",
     city: "Port Harcourt",
@@ -50,6 +54,7 @@ const copy: SeriesCopy[] = [
   },
   {
     slug: "veil",
+    tone: "#7f9a6a",
     title: "Veil",
     category: "Bridal",
     city: "Rivers State",
@@ -63,6 +68,7 @@ const copy: SeriesCopy[] = [
   },
   {
     slug: "overpass",
+    tone: "#b4633f",
     title: "Overpass",
     category: "Editorial",
     city: "Abuja",
@@ -76,6 +82,7 @@ const copy: SeriesCopy[] = [
   },
   {
     slug: "low-light",
+    tone: "#a8463f",
     title: "Low Light",
     category: "Editorial",
     city: "Lagos",
@@ -89,6 +96,7 @@ const copy: SeriesCopy[] = [
   },
   {
     slug: "monochrome",
+    tone: "#7a746c",
     title: "Knots",
     category: "Portrait",
     city: "Port Harcourt",
@@ -102,6 +110,7 @@ const copy: SeriesCopy[] = [
   },
   {
     slug: "palm-house",
+    tone: "#3f8a62",
     title: "Palm House",
     category: "Portrait",
     city: "Port Harcourt",
@@ -115,6 +124,7 @@ const copy: SeriesCopy[] = [
   },
   {
     slug: "white-rose",
+    tone: "#d26d8c",
     title: "White Rose",
     category: "Editorial",
     city: "Port Harcourt",
@@ -128,6 +138,7 @@ const copy: SeriesCopy[] = [
   },
   {
     slug: "sunday-drive",
+    tone: "#2f8a8a",
     title: "Sunday Drive",
     category: "Documentary",
     city: "Port Harcourt",
@@ -168,6 +179,7 @@ export function toCard(s: Series): SeriesCard {
     slug: s.slug,
     title: s.title,
     category: s.category,
+    tone: s.tone,
     city: s.city,
     date: s.date,
     year: s.year,
