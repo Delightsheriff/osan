@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { pexelsSrc, type Photo } from "@/content/series";
+import type { Photo } from "@/content/series";
 import { site } from "@/content/site";
 import { introDelay } from "@/lib/intro";
 
@@ -132,12 +132,12 @@ function HeroPill({ pill, order, wait }: { pill: Pill; order: number; wait: numb
             transition={{ duration: 0.9, ease }}
           >
             <Image
-              src={pexelsSrc(photo.id)}
+              src={photo}
               alt=""
               fill
               sizes="12rem"
-              priority={index === 0}
-              placeholder={photo.blur as `data:image/${string}`}
+              loading="eager"
+              placeholder="blur"
               className="object-cover grayscale-[35%] transition duration-700 group-hover:scale-110 group-hover:grayscale-0"
             />
           </motion.span>

@@ -2,14 +2,16 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { pexelsSrc, type Photo as PhotoData } from "@/content/series";
+import type { Photo as PhotoData } from "@/content/series";
 
 type Props = {
   photo: PhotoData;
   alt: string;
   sizes: string;
   className?: string;
-  priority?: boolean;
+  /** Only for the page's LCP image. */
+  preload?: boolean;
+  loading?: "eager" | "lazy";
   /** Fill the parent box instead of keeping the photo's own aspect ratio. */
   fill?: boolean;
   /** Clip-path wipe in when scrolled into view. */
@@ -21,20 +23,20 @@ export default function Photo({
   alt,
   sizes,
   className = "",
-  priority,
+  preload,
+  loading,
   fill,
   reveal = true,
 }: Props) {
   const image = (
     <Image
-      src={pexelsSrc(photo.id)}
+      src={photo}
       alt={alt}
       sizes={sizes}
-      priority={priority}
-      placeholder={photo.blur as `data:image/${string}`}
-      {...(fill
-        ? { fill: true, className: "object-cover" }
-        : { width: photo.w * 100, height: photo.h * 100, className: "h-auto w-full" })}
+      preload={preload}
+      loading={preload ? undefined : loading}
+      placeholder="blur"
+      {...(fill ? { fill: true, className: "object-cover" } : { className: "h-auto w-full" })}
     />
   );
 

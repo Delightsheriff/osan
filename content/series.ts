@@ -1,16 +1,14 @@
-import photos from "./photos.json";
+import type { StaticImageData } from "next/image";
+import ids from "./photo-ids.json";
+import { images } from "./images";
 
 export type Category = "Portrait" | "Editorial" | "Bridal" | "Documentary";
 
-export type Photo = {
-  id: number;
-  w: number;
-  h: number;
-  blur: string;
-};
+/** A self-hosted photo: a static import (src, size, blur) plus its Pexels id. */
+export type Photo = StaticImageData & { id: number };
 
 export type Series = {
-  slug: keyof typeof photos;
+  slug: keyof typeof ids;
   title: string;
   category: Category;
   city: string;
@@ -145,7 +143,7 @@ const copy: SeriesCopy[] = [
 
 export const series: Series[] = copy.map((s) => ({
   ...s,
-  photos: photos[s.slug],
+  photos: ids[s.slug].map((id) => ({ ...images[id], id })),
 }));
 
 export const categories: Category[] = [
@@ -157,10 +155,6 @@ export const categories: Category[] = [
 
 export function getSeries(slug: string) {
   return series.find((s) => s.slug === slug);
-}
-
-export function pexelsSrc(id: number) {
-  return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg`;
 }
 
 /** Lightweight shape for client components: cover only, no full photo list. */

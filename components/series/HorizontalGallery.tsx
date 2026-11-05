@@ -63,12 +63,12 @@ function Pinned({ photos, title }: Props) {
             <figure
               key={p.id}
               className="relative h-[70svh] shrink-0"
-              style={{ aspectRatio: `${p.w} / ${p.h}` }}
+              style={{ aspectRatio: `${p.width} / ${p.height}` }}
             >
               <Photo
                 photo={p}
                 alt={`${title}, frame ${i + 1}`}
-                sizes={`${Math.round((70 * p.w) / p.h)}vh`}
+                sizes={`${Math.round((70 * p.width) / p.height)}vh`}
                 fill
                 className="h-full w-full"
               />

@@ -20,7 +20,7 @@ export default function SeriesHero({ photo, title }: { photo: PhotoData; title: 
       transition={{ duration: 1.6, ease: [0.76, 0, 0.24, 1], delay: 0.35 }}
     >
       <motion.div className="absolute inset-[-12%_0]" style={{ y }}>
-        <Photo photo={photo} alt={title} sizes="100vw" fill priority reveal={false} className="h-full w-full" />
+        <Photo photo={photo} alt={title} sizes="100vw" fill preload reveal={false} className="h-full w-full" />
       </motion.div>
     </motion.div>
   );

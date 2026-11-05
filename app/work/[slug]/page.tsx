@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import RevealText from "@/components/RevealText";
 import HorizontalGallery from "@/components/series/HorizontalGallery";
 import SeriesHero from "@/components/series/SeriesHero";
-import { getSeries, pexelsSrc, series } from "@/content/series";
+import { getSeries, series } from "@/content/series";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: s.title,
     description: s.summary,
-    openGraph: { images: [`${pexelsSrc(s.photos[0].id)}?auto=compress&cs=tinysrgb&w=1200`] },
+    openGraph: { images: [{ url: s.photos[0].src, width: s.photos[0].width, height: s.photos[0].height }] },
   };
 }
 
@@ -88,11 +88,11 @@ export default async function SeriesPage({ params }: Props) {
         </div>
         <div className="relative hidden aspect-[4/5] w-48 overflow-hidden md:block">
           <Image
-            src={pexelsSrc(next.photos[0].id)}
+            src={next.photos[0]}
             alt=""
             fill
             sizes="12rem"
-            placeholder={next.photos[0].blur as `data:image/${string}`}
+            placeholder="blur"
             className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
           />
         </div>

@@ -12,7 +12,7 @@ import {
   useSpring,
   type Transition,
 } from "motion/react";
-import { pexelsSrc, type Category, type SeriesCard } from "@/content/series";
+import type { Category, SeriesCard } from "@/content/series";
 import { useFinePointer } from "@/lib/use-media-query";
 
 const views = ["Grid", "List", "Feed", "Full"] as const;
@@ -66,7 +66,7 @@ export default function WorkIndex({
   // Fetch the cover sizes a view needs before switching, so covers never flash blank.
   const warm = (v: View) => {
     for (const card of cards) {
-      const { props } = getImageProps({ src: pexelsSrc(card.cover.id), alt: "", fill: true, sizes: layouts[v].sizes });
+      const { props } = getImageProps({ src: card.cover, alt: "", fill: true, sizes: layouts[v].sizes });
       preload(props.src, { as: "image", imageSrcSet: props.srcSet, imageSizes: props.sizes });
     }
   };
@@ -164,11 +164,11 @@ export default function WorkIndex({
                   >
                     <motion.div layout transition={morph} className="absolute inset-0">
                       <Image
-                        src={pexelsSrc(card.cover.id)}
+                        src={card.cover}
                         alt={`${card.title}, ${card.city}`}
                         fill
                         sizes={l.sizes}
-                        placeholder={card.cover.blur as `data:image/${string}`}
+                        placeholder="blur"
                         className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                       />
                     </motion.div>
@@ -289,11 +289,11 @@ function ListPreview({ card }: { card: SeriesCard | null }) {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <Image
-              src={pexelsSrc(card.cover.id)}
+              src={card.cover}
               alt=""
               fill
               sizes="320px"
-              placeholder={card.cover.blur as `data:image/${string}`}
+              placeholder="blur"
               className="object-cover"
             />
           </motion.div>

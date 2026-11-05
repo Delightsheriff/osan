@@ -31,7 +31,7 @@ export default function AboutPage() {
               photo={portrait}
               alt="Portrait from the White Rose series"
               sizes="(min-width: 768px) 40vw, 100vw"
-              priority
+              loading="eager"
               className="rounded-t-full"
             />
             <p className="label mt-3 text-mute">From White Rose, {site.city}</p>

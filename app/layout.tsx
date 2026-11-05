@@ -22,11 +22,13 @@ const instrument = Instrument_Serif({
 export const metadata: Metadata = {
   title: { default: `${site.name}: ${site.tagline}`, template: `%s · ${site.name}` },
   description: site.description,
-  openGraph: {
-    siteName: site.name,
-    type: "website",
-    images: ["https://images.pexels.com/photos/33106736/pexels-photo-33106736.jpeg?auto=compress&cs=tinysrgb&w=1200"],
-  },
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "http://localhost:3000"),
+  ),
+  openGraph: { siteName: site.name, type: "website" },
   twitter: { card: "summary_large_image" },
 };
 
