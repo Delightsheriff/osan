@@ -1,7 +1,10 @@
 import Hero from "@/components/home/Hero";
 import Opening from "@/components/home/Opening";
 import Practice from "@/components/home/Practice";
-import { getSeries, series } from "@/content/series";
+import Commissions from "@/components/home/Commissions";
+import Closing from "@/components/home/Closing";
+import WorkIndex from "@/components/work/WorkIndex";
+import { categories, getSeries, series, toCard } from "@/content/series";
 
 export default function Home() {
   const pills = ["senna", "veil", "overpass"].map((slug) => {
@@ -29,6 +32,9 @@ export default function Home() {
           { value: "00", label: "Strobes" },
         ]}
       />
+      <WorkIndex cards={series.map(toCard)} categories={categories} />
+      <Commissions />
+      <Closing />
     </>
   );
 }
